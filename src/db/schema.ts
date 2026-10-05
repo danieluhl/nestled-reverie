@@ -11,6 +11,8 @@ export const posts = sqliteTable('posts', {
   /** Path of the cover photograph, e.g. /images/abc.jpg. Empty means the soft placeholder. */
   coverImage: text('cover_image').notNull().default(''),
   status: text({ enum: ['draft', 'published'] }).notNull().default('draft'),
+  /** Pinned essays lead the home page, ahead of newer ones. */
+  pinned: integer({ mode: 'boolean' }).notNull().default(false),
   publishedAt: integer('published_at', { mode: 'timestamp' }),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
@@ -38,3 +40,5 @@ export const postTags = sqliteTable(
   },
   (t) => [primaryKey({ columns: [t.postId, t.tagId] })],
 )
+
+export * from './auth-schema.ts'
