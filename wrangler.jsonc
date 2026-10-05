@@ -1,7 +1,27 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
+  "name": "nestled-reverie",
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry"
+  "main": "@tanstack/react-start/server-entry",
+  // Posts, tags and the links between them.
+  // `npm run db:create` prints the real database_id to paste here.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nestled-reverie",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  // Images uploaded from the editor.
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "nestled-reverie-images"
+    }
+  ]
+  // Secrets (set with `npx wrangler secret put <NAME>`, and in .dev.vars for local dev):
+  //   ADMIN_PASSWORD  the password for /admin
+  //   SESSION_SECRET  32+ random characters used to sign the admin login cookie
 }

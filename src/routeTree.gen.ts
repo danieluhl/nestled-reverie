@@ -10,63 +10,136 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DesignsIndexRouteImport } from './routes/designs/index'
-import { Route as DesignsSlugRouteImport } from './routes/designs/$slug'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as ApiImagesRouteImport } from './routes/api/images'
+import { Route as ImagesSplatRouteImport } from './routes/images/$'
+import { Route as JournalIndexRouteImport } from './routes/journal/index'
+import { Route as JournalSlugRouteImport } from './routes/journal/$slug'
+import { Route as AdminPostsIdRouteImport } from './routes/admin/posts/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DesignsIndexRoute = DesignsIndexRouteImport.update({
-  id: '/designs/',
-  path: '/designs/',
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DesignsSlugRoute = DesignsSlugRouteImport.update({
-  id: '/designs/$slug',
-  path: '/designs/$slug',
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const ApiImagesRoute = ApiImagesRouteImport.update({
+  id: '/api/images',
+  path: '/api/images',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
+const ImagesSplatRoute = ImagesSplatRouteImport.update({
+  id: '/images/$',
+  path: '/images/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const JournalIndexRoute = JournalIndexRouteImport.update({
+  id: '/journal/',
+  path: '/journal/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalSlugRoute = JournalSlugRouteImport.update({
+  id: '/journal/$slug',
+  path: '/journal/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPostsIdRoute = AdminPostsIdRouteImport.update({
+  id: '/posts/$id',
+  path: '/posts/$id',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/designs/$slug': typeof DesignsSlugRoute
-  '/designs/': typeof DesignsIndexRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
+  '/api/images': typeof ApiImagesRoute
+  '/images/$': typeof ImagesSplatRoute
+  '/journal/$slug': typeof JournalSlugRoute
+  '/admin/': typeof AdminIndexRoute
+  '/journal/': typeof JournalIndexRoute
+  '/admin/posts/$id': typeof AdminPostsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/designs/$slug': typeof DesignsSlugRoute
-  '/designs': typeof DesignsIndexRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/api/images': typeof ApiImagesRoute
+  '/images/$': typeof ImagesSplatRoute
+  '/journal/$slug': typeof JournalSlugRoute
+  '/admin': typeof AdminIndexRoute
+  '/journal': typeof JournalIndexRoute
+  '/admin/posts/$id': typeof AdminPostsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/designs/$slug': typeof DesignsSlugRoute
-  '/designs/': typeof DesignsIndexRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
+  '/api/images': typeof ApiImagesRoute
+  '/images/$': typeof ImagesSplatRoute
+  '/journal/$slug': typeof JournalSlugRoute
+  '/admin/': typeof AdminIndexRoute
+  '/journal/': typeof JournalIndexRoute
+  '/admin/posts/$id': typeof AdminPostsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/designs/$slug' | '/designs/' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/admin/login'
+    | '/api/images'
+    | '/images/$'
+    | '/journal/$slug'
+    | '/admin/'
+    | '/journal/'
+    | '/admin/posts/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/designs/$slug' | '/designs' | '/api/auth/$'
-  id: '__root__' | '/' | '/designs/$slug' | '/designs/' | '/api/auth/$'
+  to:
+    | '/'
+    | '/admin/login'
+    | '/api/images'
+    | '/images/$'
+    | '/journal/$slug'
+    | '/admin'
+    | '/journal'
+    | '/admin/posts/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/admin/login'
+    | '/api/images'
+    | '/images/$'
+    | '/journal/$slug'
+    | '/admin/'
+    | '/journal/'
+    | '/admin/posts/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DesignsSlugRoute: typeof DesignsSlugRoute
-  DesignsIndexRoute: typeof DesignsIndexRoute
-  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  ApiImagesRoute: typeof ApiImagesRoute
+  ImagesSplatRoute: typeof ImagesSplatRoute
+  JournalSlugRoute: typeof JournalSlugRoute
+  JournalIndexRoute: typeof JournalIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,35 +151,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/designs/': {
-      id: '/designs/'
-      path: '/designs'
-      fullPath: '/designs/'
-      preLoaderRoute: typeof DesignsIndexRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/designs/$slug': {
-      id: '/designs/$slug'
-      path: '/designs/$slug'
-      fullPath: '/designs/$slug'
-      preLoaderRoute: typeof DesignsSlugRouteImport
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/api/images': {
+      id: '/api/images'
+      path: '/api/images'
+      fullPath: '/api/images'
+      preLoaderRoute: typeof ApiImagesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
+    '/images/$': {
+      id: '/images/$'
+      path: '/images/$'
+      fullPath: '/images/$'
+      preLoaderRoute: typeof ImagesSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/journal/': {
+      id: '/journal/'
+      path: '/journal'
+      fullPath: '/journal/'
+      preLoaderRoute: typeof JournalIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal/$slug': {
+      id: '/journal/$slug'
+      path: '/journal/$slug'
+      fullPath: '/journal/$slug'
+      preLoaderRoute: typeof JournalSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/posts/$id': {
+      id: '/admin/posts/$id'
+      path: '/posts/$id'
+      fullPath: '/admin/posts/$id'
+      preLoaderRoute: typeof AdminPostsIdRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
   }
 }
 
+interface AdminRouteRouteChildren {
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminPostsIdRoute: typeof AdminPostsIdRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminPostsIdRoute: AdminPostsIdRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DesignsSlugRoute: DesignsSlugRoute,
-  DesignsIndexRoute: DesignsIndexRoute,
-  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
+  ApiImagesRoute: ApiImagesRoute,
+  ImagesSplatRoute: ImagesSplatRoute,
+  JournalSlugRoute: JournalSlugRoute,
+  JournalIndexRoute: JournalIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
