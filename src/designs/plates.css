@@ -1,0 +1,43 @@
+/* Abstract photo placeholders shared by every design */
+
+.plate {
+  position: relative;
+  overflow: hidden;
+  background-color: #f6e4df;
+
+  & svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.plate--blush {
+  background:
+    radial-gradient(60% 50% at 30% 22%, #fff7f3 0%, transparent 70%),
+    radial-gradient(70% 60% at 78% 85%, #ebc6bf 0%, transparent 70%),
+    #f5e2dc;
+}
+
+.plate--rose {
+  background:
+    radial-gradient(55% 45% at 72% 25%, #f9e7e3 0%, transparent 70%),
+    radial-gradient(70% 60% at 18% 88%, #d9a8a4 0%, transparent 72%),
+    #ecccc7;
+}
+
+.plate--ivory {
+  background:
+    radial-gradient(60% 50% at 50% 28%, #ffffff 0%, transparent 70%),
+    radial-gradient(80% 60% at 82% 92%, #efdfcc 0%, transparent 70%),
+    #faf4ec;
+}
+
+.plate--gold {
+  background:
+    radial-gradient(55% 45% at 28% 26%, #fbf4e6 0%, transparent 70%),
+    radial-gradient(75% 60% at 78% 86%, #dcbd8b 0%, transparent 72%),
+    #f0e1c7;
+}
