@@ -27,9 +27,12 @@ pnpm db:seed:local              # optional: six sample essays to look at
 pnpm dev                        # http://localhost:3000, admin at /admin
 ```
 
-## Deploying to a Cloudflare subdomain
+## Deploying to ramya.reyan.me
 
-The domain's DNS needs to be on Cloudflare already (it shows as Active in the Cloudflare dashboard).
+The blog lives at **https://ramya.reyan.me**, set in `routes` in `wrangler.jsonc`. The `reyan.me` domain needs to be
+on Cloudflare already (it shows as Active in the Cloudflare dashboard), and `ramya.reyan.me` must not already have
+a DNS record, so delete any old one first.
+
 Run these once from the project folder:
 
 ```bash
@@ -52,15 +55,9 @@ openssl rand -base64 32 | pnpm wrangler secret put SESSION_SECRET
 pnpm run deploy
 ```
 
-Then point the subdomain at it. In `wrangler.jsonc`, add your subdomain and deploy again:
-
-```jsonc
-"routes": [{ "pattern": "blog.yourdomain.com", "custom_domain": true }]
-```
-
-Cloudflare creates the DNS record and the HTTPS certificate for you. The subdomain must not already have a DNS
-record, so delete any old one first. The same thing can be done in the dashboard: Workers & Pages →
-nestled-reverie → Settings → Domains & Routes → Add → Custom domain.
+The first deploy also creates the `ramya.reyan.me` DNS record and its HTTPS certificate, which can take a few
+minutes to start working. To check or change the address later, see Workers & Pages → nestled-reverie → Settings →
+Domains & Routes in the Cloudflare dashboard.
 
 After the first time, shipping code changes is just `pnpm run deploy`. If the database schema changes,
 run `pnpm db:generate` and then `pnpm db:migrate` before deploying.
