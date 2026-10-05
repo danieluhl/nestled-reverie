@@ -20,11 +20,11 @@ Sign in at `/admin`, then **Write something new**.
 ## Running it locally
 
 ```bash
-npm install
+pnpm install
 cp .dev.vars.example .dev.vars     # then set ADMIN_PASSWORD and SESSION_SECRET in it
-npm run db:migrate:local
-npm run db:seed:local              # optional: six sample essays to look at
-npm run dev                        # http://localhost:3000, admin at /admin
+pnpm db:migrate:local
+pnpm db:seed:local              # optional: six sample essays to look at
+pnpm dev                        # http://localhost:3000, admin at /admin
 ```
 
 ## Deploying to a Cloudflare subdomain
@@ -33,23 +33,23 @@ The domain's DNS needs to be on Cloudflare already (it shows as Active in the Cl
 Run these once from the project folder:
 
 ```bash
-npx wrangler login
+pnpm wrangler login
 
 # 1. Create the database, then paste the database_id it prints into wrangler.jsonc
-npm run db:create
+pnpm db:create
 
 # 2. Create the bucket for photos
-npx wrangler r2 bucket create nestled-reverie-images
+pnpm wrangler r2 bucket create nestled-reverie-images
 
 # 3. Create the tables
-npm run db:migrate
+pnpm db:migrate
 
 # 4. Set the admin password and a random session secret
-npx wrangler secret put ADMIN_PASSWORD
-openssl rand -base64 32 | npx wrangler secret put SESSION_SECRET
+pnpm wrangler secret put ADMIN_PASSWORD
+openssl rand -base64 32 | pnpm wrangler secret put SESSION_SECRET
 
 # 5. Deploy
-npm run deploy
+pnpm run deploy
 ```
 
 Then point the subdomain at it. In `wrangler.jsonc`, add your subdomain and deploy again:
@@ -62,8 +62,8 @@ Cloudflare creates the DNS record and the HTTPS certificate for you. The subdoma
 record, so delete any old one first. The same thing can be done in the dashboard: Workers & Pages →
 nestled-reverie → Settings → Domains & Routes → Add → Custom domain.
 
-After the first time, shipping code changes is just `npm run deploy`. If the database schema changes,
-run `npm run db:generate` and then `npm run db:migrate` before deploying.
+After the first time, shipping code changes is just `pnpm run deploy`. If the database schema changes,
+run `pnpm db:generate` and then `pnpm db:migrate` before deploying.
 
 ## Code map
 

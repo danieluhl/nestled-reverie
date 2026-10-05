@@ -5,7 +5,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
   // Posts, tags and the links between them.
-  // `npm run db:create` prints the real database_id to paste here.
+  // `pnpm db:create` prints the real database_id to paste here.
   "d1_databases": [
     {
       "binding": "DB",
@@ -21,7 +21,7 @@
       "bucket_name": "nestled-reverie-images"
     }
   ]
-  // Secrets (set with `npx wrangler secret put <NAME>`, and in .dev.vars for local dev):
+  // Secrets (set with `pnpm wrangler secret put <NAME>`, and in .dev.vars for local dev):
   //   ADMIN_PASSWORD  the password for /admin
   //   SESSION_SECRET  32+ random characters used to sign the admin login cookie
 }

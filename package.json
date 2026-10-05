@@ -2,6 +2,7 @@
   "name": "nestled-reverie",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.28.0",
   "imports": {
     "#/*": "./src/*"
   },
@@ -13,7 +14,7 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
-    "deploy": "npm run build && wrangler deploy",
+    "deploy": "pnpm build && wrangler deploy",
     "db:generate": "drizzle-kit generate",
     "typecheck": "wrangler types && tsc --noEmit",
     "db:create": "wrangler d1 create nestled-reverie",

@@ -1,4 +1,4 @@
--- Sample essays for local preview only: npm run db:seed:local
+-- Sample essays for local preview only: pnpm db:seed:local
 DELETE FROM post_tags; DELETE FROM posts; DELETE FROM tags;
 INSERT INTO tags (name, slug) VALUES ('Career', 'career');
 INSERT INTO tags (name, slug) VALUES ('Motherhood', 'motherhood');
