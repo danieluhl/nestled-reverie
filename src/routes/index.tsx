@@ -7,7 +7,7 @@ import { Plate } from '#/site/Plate'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const [posts, tags] = await Promise.all([listPosts({ data: { sort: 'newest', limit: 4 } }), listTags()])
+    const [posts, tags] = await Promise.all([listPosts({ data: { sort: 'newest', limit: 4, pinnedFirst: true } }), listTags()])
     return { posts, tags }
   },
   component: Home,
@@ -48,7 +48,7 @@ function Home() {
         <div className="gs-featured-card">
           {featured ? (
             <>
-              <span className="gs-label">The latest essay</span>
+              <span className="gs-label">{featured.pinned ? 'Featured essay' : 'The latest essay'}</span>
               <h2>{featured.title}</h2>
               <p>{featured.excerpt}</p>
               <Link to="/journal/$slug" params={{ slug: featured.slug }} className="gs-script-link">

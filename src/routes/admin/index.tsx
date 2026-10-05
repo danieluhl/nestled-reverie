@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useState } from 'react'
-import { logout } from '#/server/auth'
-import { adminCreatePost, adminListPosts } from '#/server/posts'
+import { authClient } from '#/lib/auth-client'
+import { Pin } from 'lucide-react'
+import { adminCreatePost, adminListPosts, adminSetPinned } from '#/server/posts'
 import { Cover } from '#/site/Cover'
 import { formatDate } from '#/site/format'
 
@@ -25,8 +26,13 @@ function Desk() {
     router.navigate({ to: '/admin/posts/$id', params: { id: String(id) } })
   }
 
+  async function togglePin(id: number, pinned: boolean) {
+    await adminSetPinned({ data: { id, pinned } })
+    await router.invalidate()
+  }
+
   async function signOut() {
-    await logout()
+    await authClient.signOut()
     router.navigate({ to: '/admin/login' })
   }
 
@@ -84,11 +90,22 @@ function Desk() {
                     <span className="ad-pill" data-status={p.status}>
                       {p.status === 'published' ? 'Published' : 'Draft'}
                     </span>
+                    {p.pinned && <span className="ad-pill" data-status="published">Pinned</span>}
                     {p.status === 'published' ? formatDate(p.publishedAt) : `Edited ${formatDate(p.updatedAt)}`}
                     {p.tags.length > 0 && <> · {p.tags.map((t) => t.name).join(', ')}</>}
                   </span>
                 </div>
               </Link>
+              <button
+                type="button"
+                className="ad-pin"
+                aria-pressed={p.pinned}
+                aria-label={p.pinned ? 'Unpin from home page' : 'Pin to home page'}
+                title={p.pinned ? 'Pinned to the home page' : 'Pin to the home page'}
+                onClick={() => togglePin(p.id, !p.pinned)}
+              >
+                <Pin />
+              </button>
             </li>
           ))}
         </ul>

@@ -24,6 +24,7 @@ export interface PostSummary {
   coverImage: string
   publishedAt: string | null
   readTime: string
+  pinned: boolean
   tags: Tag[]
 }
 
@@ -46,7 +47,7 @@ export function slugify(text: string) {
     .slice(0, 80)
 }
 
-function readTime(html: string) {
+export function readTime(html: string) {
   const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
   return `${Math.max(1, Math.round(words / 230))} min read`
 }
@@ -79,6 +80,7 @@ function toSummary(p: PostRow, t: Map<number, Tag[]>): PostSummary {
     coverImage: p.coverImage,
     publishedAt: p.publishedAt ? p.publishedAt.toISOString() : null,
     readTime: readTime(p.content),
+    pinned: p.pinned,
     tags: t.get(p.id) ?? [],
   }
 }
@@ -88,7 +90,7 @@ const isPublished = eq(posts.status, 'published')
 /* ------------------------------------------------------------------ public */
 
 export const listPosts = createServerFn()
-  .validator((d: { tag?: string; sort?: Sort; limit?: number }) => d)
+  .validator((d: { tag?: string; sort?: Sort; limit?: number; pinnedFirst?: boolean }) => d)
   .handler(async ({ data }) => {
     const db = getDb()
     const order =
@@ -97,6 +99,7 @@ export const listPosts = createServerFn()
         : data.sort === 'title'
           ? [asc(sql`lower(${posts.title})`)]
           : [desc(posts.publishedAt)]
+    if (data.pinnedFirst) order.unshift(desc(posts.pinned))
 
     const where = data.tag
       ? and(
@@ -150,7 +153,7 @@ export const getPost = createServerFn()
 
 export const adminListPosts = createServerFn().handler(async () => {
   await requireAdmin()
-  const rows = await getDb().select().from(posts).orderBy(desc(posts.updatedAt))
+  const rows = await getDb().select().from(posts).orderBy(desc(posts.pinned), desc(posts.updatedAt))
   const t = await tagsFor(rows.map((r) => r.id))
   return rows.map((r) => ({
     ...toSummary(r, t),
@@ -262,6 +265,14 @@ export const adminSavePost = createServerFn({ method: 'POST' })
       await db.insert(postTags).values(found.map((t) => ({ postId: data.id, tagId: t.id })))
     }
     return { slug }
+  })
+
+export const adminSetPinned = createServerFn({ method: 'POST' })
+  .validator((d: { id: number; pinned: boolean }) => ({ id: Number(d.id), pinned: Boolean(d.pinned) }))
+  .handler(async ({ data }) => {
+    await requireAdmin()
+    await getDb().update(posts).set({ pinned: data.pinned }).where(eq(posts.id, data.id))
+    return { pinned: data.pinned }
   })
 
 export const adminDeletePost = createServerFn({ method: 'POST' })

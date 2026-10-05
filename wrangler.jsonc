@@ -23,7 +23,6 @@
       "bucket_name": "nestled-reverie-images"
     }
   ]
-  // Secrets (set with `pnpm wrangler secret put <NAME>`, and in .dev.vars for local dev):
-  //   ADMIN_PASSWORD  the password for /admin
-  //   SESSION_SECRET  32+ random characters used to sign the admin login cookie
+  // Secret (set with `pnpm wrangler secret put BETTER_AUTH_SECRET`, and in .dev.vars for local dev):
+  //   BETTER_AUTH_SECRET  32+ random characters Better Auth uses to sign sessions
 }

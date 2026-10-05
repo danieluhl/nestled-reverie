@@ -1,10 +1,20 @@
 import { createFileRoute, Link, notFound, useBlocker, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, ImagePlus } from 'lucide-react'
+import { ArrowLeft, Eye, ImagePlus, Pin } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Editor } from '#/admin/Editor'
 import { TagInput } from '#/admin/TagInput'
 import { uploadImage } from '#/admin/upload'
-import { adminAllTags, adminDeletePost, adminGetPost, adminSavePost, type SavePostInput } from '#/server/posts'
+import {
+  adminAllTags,
+  adminDeletePost,
+  adminGetPost,
+  adminSavePost,
+  adminSetPinned,
+  readTime,
+  type SavePostInput,
+  slugify,
+} from '#/server/posts'
+import { PostArticle } from '#/site/PostArticle'
 
 export const Route = createFileRoute('/admin/posts/$id')({
   loader: async ({ params }) => {
@@ -36,6 +46,8 @@ function EditPost() {
   const [slug, setSlug] = useState(post.slug)
   const [saveState, setSaveState] = useState<SaveState>('saved')
   const [coverBusy, setCoverBusy] = useState(false)
+  const [pinned, setPinned] = useState(post.pinned)
+  const [previewing, setPreviewing] = useState(false)
   const latest = useRef(draft)
   latest.current = draft
 
@@ -102,6 +114,12 @@ function EditPost() {
     }
   }
 
+  async function togglePin() {
+    const next = !pinned
+    setPinned(next)
+    await adminSetPinned({ data: { id: post.id, pinned: next } })
+  }
+
   async function publish() {
     if (!draft.title.trim()) {
       window.alert('Give the essay a title before publishing.')
@@ -147,6 +165,18 @@ function EditPost() {
           <span className="ad-status" data-state={saveState}>
             {statusText}
           </span>
+          <button
+            type="button"
+            className="ad-link"
+            aria-pressed={pinned}
+            title="Pinned essays lead the home page"
+            onClick={togglePin}
+          >
+            <Pin /> {pinned ? 'Pinned to home' : 'Pin to home'}
+          </button>
+          <button type="button" className="ad-link" onClick={() => setPreviewing(true)}>
+            <Eye /> Preview
+          </button>
           {published ? (
             <>
               <a href={`/journal/${slug}`} target="_blank" rel="noreferrer" className="ad-link">
@@ -211,11 +241,55 @@ function EditPost() {
 
         <Editor content={post.content} onChange={setContent} />
 
+        {previewing && (
+          <Preview
+            onClose={() => setPreviewing(false)}
+            post={{
+              id: post.id,
+              title: draft.title,
+              excerpt: draft.excerpt,
+              content: draft.content,
+              coverImage: draft.coverImage,
+              publishedAt: post.publishedAt,
+              readTime: readTime(draft.content),
+              tags: draft.tags.map((name) => ({ name, slug: slugify(name) })),
+            }}
+          />
+        )}
+
         <div className="ad-danger">
           <button type="button" className="ad-link" onClick={remove}>
             Delete this essay
           </button>
         </div>
+      </div>
+    </div>
+  )
+}
+
+/** The essay exactly as readers will see it, including changes not saved yet. */
+function Preview({ post, onClose }: { post: React.ComponentProps<typeof PostArticle>['post']; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
+  return (
+    <div className="ad-preview" role="dialog" aria-modal="true" aria-label="Preview">
+      <div className="ad-preview-bar">
+        <span>Preview · this is how readers will see it</span>
+        <button type="button" className="ad-btn ad-btn-gold" onClick={onClose}>
+          Back to editing
+        </button>
+      </div>
+      {/* Links inside the preview would leave the editor, so they are switched off. */}
+      <div className="gs ad-preview-page" inert>
+        <PostArticle post={post} />
       </div>
     </div>
   )

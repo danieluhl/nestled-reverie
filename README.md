@@ -8,12 +8,18 @@ Built with TanStack Start and running on Cloudflare Workers, with posts in Cloud
 
 ## Writing
 
-Sign in at `/admin`, then **Write something new**.
+Go to `/admin`. The very first visit asks for a name, email and password and creates the author account;
+after that, sign-up is closed and the page just signs you in (Better Auth, sessions kept for 30 days).
+Then click **Write something new**.
 
 - Add a cover photo by clicking the arch. Type a title and a short line to invite the reader in.
 - Add topics by typing and pressing Enter. Existing topics are suggested as you type. Readers can filter the journal by them.
 - The toolbar has headings, bold, italic, underline, links, bullet and numbered lists, quotes, a divider and photos.
   Photos can also be pasted or dragged straight into the text.
+- **Preview** shows the essay exactly as readers will see it, including changes you haven't saved yet.
+- **Pin** (in the editor, or the pin icon in the essay list) puts an essay at the top of the home page.
+  With several pinned, the newest pinned one leads.
+- **Delete this essay** is at the bottom of the editor.
 - Drafts save themselves as you type. **Publish** puts the essay on the site.
   After that, edits wait for **Update** so half-finished changes never go live. ⌘S / Ctrl+S saves too.
 
@@ -21,7 +27,7 @@ Sign in at `/admin`, then **Write something new**.
 
 ```bash
 pnpm install
-cp .dev.vars.example .dev.vars     # then set ADMIN_PASSWORD and SESSION_SECRET in it
+cp .dev.vars.example .dev.vars     # then set BETTER_AUTH_SECRET in it
 pnpm db:migrate:local
 pnpm db:seed:local              # optional: six sample essays to look at
 pnpm dev                        # http://localhost:3000, admin at /admin
@@ -47,13 +53,15 @@ pnpm wrangler r2 bucket create nestled-reverie-images
 # 3. Create the tables
 pnpm db:migrate
 
-# 4. Set the admin password and a random session secret
-pnpm wrangler secret put ADMIN_PASSWORD
-openssl rand -base64 32 | pnpm wrangler secret put SESSION_SECRET
+# 4. Set the secret Better Auth signs sessions with
+openssl rand -base64 32 | pnpm wrangler secret put BETTER_AUTH_SECRET
 
 # 5. Deploy
 pnpm run deploy
 ```
+
+Right after the first deploy, open https://ramya.reyan.me/admin and create the author account. Until that
+account exists, whoever opens that page first can create it.
 
 The first deploy also creates the `ramya.reyan.me` DNS record and its HTTPS certificate, which can take a few
 minutes to start working. To check or change the address later, see Workers & Pages → nestled-reverie → Settings →
@@ -67,5 +75,6 @@ run `pnpm db:generate` and then `pnpm db:migrate` before deploying.
 - `src/routes/` pages: home, journal, essay, admin, plus `/api/images` (upload) and `/images/*` (serving photos)
 - `src/site/` the Gilded Script look: `site.css`, the header and footer, and the soft placeholder images
 - `src/admin/` the writing desk: the Tiptap editor, topic input and styles
-- `src/server/` server functions for posts and tags, and the admin session
+- `src/lib/auth.ts` Better Auth setup (one author account, stored in D1)
+- `src/server/` server functions for posts and tags, and the admin session check
 - `src/db/schema.ts` the tables; migrations live in `drizzle/`
