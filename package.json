@@ -2,6 +2,7 @@
   "name": "nestled-reverie",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.28.0",
   "imports": {
     "#/*": "./src/*"
   },
@@ -13,12 +14,13 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
-    "deploy": "npm run build && wrangler deploy",
+    "deploy": "pnpm build && wrangler deploy",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:pull": "drizzle-kit pull",
-    "db:studio": "drizzle-kit studio"
+    "typecheck": "wrangler types && tsc --noEmit",
+    "db:create": "wrangler d1 create nestled-reverie",
+    "db:migrate:local": "wrangler d1 migrations apply nestled-reverie --local",
+    "db:migrate": "wrangler d1 migrations apply nestled-reverie --remote",
+    "db:seed:local": "wrangler d1 execute nestled-reverie --local --file scripts/seed.sql"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -29,8 +31,11 @@
     "@tanstack/react-router-devtools": "latest",
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
-    "better-auth": "^1.5.3",
-    "better-sqlite3": "^12.6.2",
+    "@tiptap/extension-image": "^3.31.4",
+    "@tiptap/extensions": "^3.31.4",
+    "@tiptap/pm": "^3.31.4",
+    "@tiptap/react": "^3.31.4",
+    "@tiptap/starter-kit": "^3.31.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.31.9",
@@ -48,24 +53,13 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.132.0",
-    "@types/better-sqlite3": "^7.6.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
-    "dotenv": "^17.3.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",
     "wrangler": "^4.70.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss",
-      "sharp",
-      "workerd",
-      "better-sqlite3"
-    ]
   }
 }
