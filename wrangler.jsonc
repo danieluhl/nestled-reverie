@@ -5,7 +5,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
   // The blog's address. Cloudflare creates the DNS record and HTTPS certificate on deploy.
-  "routes": [{ "pattern": "ramya.reyan.me", "custom_domain": true }],
+  "routes": [{ "pattern": "nestled-reverie.com", "custom_domain": true }],
   // Posts, tags and the links between them.
   // `pnpm db:create` prints the real database_id to paste here.
   "d1_databases": [

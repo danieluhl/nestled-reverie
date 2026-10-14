@@ -33,11 +33,11 @@ pnpm db:seed:local              # optional: six sample essays to look at
 pnpm dev                        # http://localhost:3000, admin at /admin
 ```
 
-## Deploying to ramya.reyan.me
+## Deploying to nestled-reverie.com
 
-The blog lives at **https://ramya.reyan.me**, set in `routes` in `wrangler.jsonc`. The `reyan.me` domain needs to be
-on Cloudflare already (it shows as Active in the Cloudflare dashboard), and `ramya.reyan.me` must not already have
-a DNS record, so delete any old one first.
+The blog lives at **https://nestled-reverie.com**, set in `routes` in `wrangler.jsonc`. The `nestled-reverie.com`
+domain needs to be on Cloudflare already (it shows as Active in the Cloudflare dashboard), and
+`nestled-reverie.com` must not already have a DNS record, so delete any old one first.
 
 Run these once from the project folder:
 
@@ -60,10 +60,10 @@ openssl rand -base64 32 | pnpm wrangler secret put BETTER_AUTH_SECRET
 pnpm run deploy
 ```
 
-Right after the first deploy, open https://ramya.reyan.me/admin and create the author account. Until that
+Right after the first deploy, open https://nestled-reverie.com/admin and create the author account. Until that
 account exists, whoever opens that page first can create it.
 
-The first deploy also creates the `ramya.reyan.me` DNS record and its HTTPS certificate, which can take a few
+The first deploy also creates the `nestled-reverie.com` DNS record and its HTTPS certificate, which can take a few
 minutes to start working. To check or change the address later, see Workers & Pages → nestled-reverie → Settings →
 Domains & Routes in the Cloudflare dashboard.
 
