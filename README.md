@@ -44,7 +44,8 @@ Run these once from the project folder:
 ```bash
 pnpm wrangler login
 
-# 1. Create the database, then paste the database_id it prints into wrangler.jsonc
+# 1. Create the database, then paste only the database_id it prints into wrangler.jsonc
+#    (leave the binding as "DB")
 pnpm db:create
 
 # 2. Create the bucket for photos

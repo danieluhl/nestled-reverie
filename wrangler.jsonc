@@ -12,12 +12,14 @@
     },
   ],
   // Posts, tags and the links between them.
-  // `pnpm db:create` prints the real database_id to paste here.
+  // `pnpm db:create` prints the real database_id to paste here. Keep the binding as "DB"
+  // (the code reads env.DB) and migrations_dir as "drizzle" (where the migrations live).
   "d1_databases": [
     {
-      "binding": "nestled_reverie",
+      "binding": "DB",
       "database_name": "nestled-reverie",
       "database_id": "b296d9ee-db88-4db7-b46c-cd59db2421ac",
+      "migrations_dir": "drizzle",
     },
   ],
   // Images uploaded from the editor.
