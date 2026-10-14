@@ -5,24 +5,29 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
   // The blog's address. Cloudflare creates the DNS record and HTTPS certificate on deploy.
-  "routes": [{ "pattern": "nestled-reverie.com", "custom_domain": true }],
+  "routes": [
+    {
+      "pattern": "nestled-reverie.com",
+      "custom_domain": true,
+    },
+  ],
   // Posts, tags and the links between them.
   // `pnpm db:create` prints the real database_id to paste here.
   "d1_databases": [
     {
-      "binding": "DB",
+      "binding": "nestled_reverie",
       "database_name": "nestled-reverie",
-      "database_id": "00000000-0000-0000-0000-000000000000",
-      "migrations_dir": "drizzle"
-    }
+      "database_id": "b296d9ee-db88-4db7-b46c-cd59db2421ac",
+    },
   ],
   // Images uploaded from the editor.
   "r2_buckets": [
     {
       "binding": "IMAGES",
-      "bucket_name": "nestled-reverie-images"
-    }
-  ]
+      "bucket_name": "nestled-reverie-images",
+    },
+  ],
   // Secret (set with `pnpm wrangler secret put BETTER_AUTH_SECRET`, and in .dev.vars for local dev):
   //   BETTER_AUTH_SECRET  32+ random characters Better Auth uses to sign sessions
 }
+
